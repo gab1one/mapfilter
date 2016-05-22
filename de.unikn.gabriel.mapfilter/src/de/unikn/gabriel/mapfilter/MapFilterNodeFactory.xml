@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (c) 2010 IBM Corporation
+	and others. All rights reserved. This program and the accompanying materials
+	are made available under the terms of the Eclipse Public License v1.0 which
+	accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+	Contributors: IBM Corporation - initial API and implementation -->
+
+<!DOCTYPE knimeNode PUBLIC "-//UNIKN//DTD KNIME Node 2.0//EN" "http://www.knime.org/Node.dtd">
+<!-- <knimeNode icon="TrackHiliter.png" type="Manipulator"> -->
+<knimeNode icon="missing.png" type="Manipulator">
+
+	<name>Reference Row filter (Map)</name>
+
+	<shortDescription>
+	Node that filters rows using a map in a streamable way.
+	</shortDescription>
+
+	<fullDescription>
+		<intro> 
+		Todo
+		</intro>
+	</fullDescription>
+
+	<ports>
+		<inPort index="0" name="Table">Table to be filtered.</inPort>
+		<inPort name="Reference Table" index="1"> Reference Table</inPort>
+		<outPort index="0" name="Table">The filtered input Table.</outPort>
+	</ports>
+
+</knimeNode>
