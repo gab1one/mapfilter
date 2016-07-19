@@ -3,9 +3,9 @@ package de.unikn.gabriel.mapfilter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
@@ -37,7 +37,6 @@ public class MapFilterNodeModel extends NodeModel {
     static final int MAP_PORT = 1;
     private static final String PRESENT = "1";
 
-    private Map<String, String> m_referenceMap;
     private final List<SettingsModel> m_settingsmodels = new ArrayList<>();
 
     private final SettingsModelColumnName m_mapColNameModel =
@@ -71,7 +70,7 @@ public class MapFilterNodeModel extends NodeModel {
     protected BufferedDataTable[] execute(final BufferedDataTable[] inData,
             final ExecutionContext exec) throws Exception {
 
-        m_referenceMap = new HashMap<>();
+        final Set<String> referenceSet = new HashSet<>();
         /**
          * {@inheritDoc}
          */
@@ -82,7 +81,7 @@ public class MapFilterNodeModel extends NodeModel {
             final String key = useMapRowID ? row.getKey().getString()
                     : ((StringValue) row.getCell(m_filterColidx))
                             .getStringValue();
-            m_referenceMap.put(key, PRESENT);
+            referenceSet.add(key);
         });
 
         final BufferedDataContainer container =
@@ -95,7 +94,7 @@ public class MapFilterNodeModel extends NodeModel {
             final String key = useFilterRowID ? row.getKey().getString()
                     : ((StringValue) row.getCell(m_filterColidx))
                             .getStringValue();
-            if (m_referenceMap.containsKey(key)) {
+            if (referenceSet.contains(key)) {
                 container.addRowToTable(row);
             }
         });
@@ -117,7 +116,7 @@ public class MapFilterNodeModel extends NodeModel {
                     final PortOutput[] outputs, final ExecutionContext exec)
                             throws Exception {
 
-                m_referenceMap = new HashMap<>();
+                final Set<String> referenceSet = new HashSet<>();
                 final RowInput dataRowInput = (RowInput) inputs[DATA_PORT];
                 final RowInput mapRowInput = (RowInput) inputs[MAP_PORT];
 
@@ -134,7 +133,7 @@ public class MapFilterNodeModel extends NodeModel {
                                     : ((StringValue) inputRow
                                             .getCell(m_filterColidx))
                                                     .getStringValue();
-                    m_referenceMap.put(key, PRESENT);
+                    referenceSet.add(key);
                 }
                 mapRowInput.close();
 
@@ -148,7 +147,7 @@ public class MapFilterNodeModel extends NodeModel {
                                     : ((StringValue) inputRow
                                             .getCell(m_filterColidx))
                                                     .getStringValue();
-                    if (m_referenceMap.containsKey(key)) {
+                    if (referenceSet.contains(key)) {
                         rowOutput.push(inputRow);
                     }
                     exec.setMessage(String.format("Row %d (\"%s\"))", ++index,
@@ -173,7 +172,7 @@ public class MapFilterNodeModel extends NodeModel {
 
     @Override
     protected void reset() {
-        m_referenceMap = null;
+        // Nothing to reset
     }
 
     @Override
